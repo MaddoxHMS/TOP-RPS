@@ -1,3 +1,6 @@
+
+
+
 function getComputerChoice (){
     let choices = ["Rock","Paper","Scissors"];
     return choices[Math.floor(Math.random()*choices.length)];
@@ -5,6 +8,7 @@ function getComputerChoice (){
 
 
 function playRound(playerChoice, ComputerChoice){
+
     
     let rock = {
         rock: "Tie",
@@ -55,43 +59,46 @@ function playRound(playerChoice, ComputerChoice){
     }
 
 
-        output.phrase = output.result == "Win" ? `${playerChoice} beats ${ComputerChoice}!`
-                : output.result == "Lose" ? `${ComputerChoice} beats ${playerChoice}!`
-                : "Play Again!";
 
-    console.log("Your Choice: ",playerChoice);
-    console.log("Computer Choice: ",ComputerChoice);
     return output;
 }
 
 
 function game(){
-    console.log("Let's Play Rock-Paper-Scissors!!!")
     playerScore = 0;
     compScore = 0;
+
+
     
-    for(let i = 1; i<6; i++) {
-        console.log(`****************`);
-        console.log(`Round ${i}`);
-        let playerChoice = prompt("Select Rock, Paper, or Scissors");
-        let currentRound = playRound(playerChoice,getComputerChoice());
-        playerScore += currentRound.playerScoreDelta;
-        compScore += currentRound.compScoreDelta;
+        let pickers = document.querySelectorAll(".container > div");
+        pickers.forEach(picker =>{
+        picker.addEventListener("click", ()=> {
+            
+            playerChoice = picker.textContent;
+            let currentRound = playRound(playerChoice,getComputerChoice());
+            playerScore += currentRound.playerScoreDelta;
+            compScore += currentRound.compScoreDelta;
 
-        console.log(`You ${currentRound.result}!!! ${currentRound.phrase}`);
-        console.log(`Current Score:
-        You: ${playerScore}  Bot: ${compScore}`);
-        
+            let header = document.querySelector("h1");
+            header.textContent = `You ${currentRound.result}!!! ${currentRound.phrase}`
+            document.getElementById("score").textContent = `You: ${playerScore}    Computer: ${compScore}`;
 
-    }
-    console.log(`****************`);console.log(`****************`);console.log(`****************`);
-    let overallResult = playerScore > compScore ? "Win"
-        : compScore > playerScore ? "Lose"
-        :"Tie";
-    console.log(`FINAL Score:
-        You: ${playerScore}  Bot: ${compScore}`);   
-    console.log(`You ${overallResult}!!!!!!!!!!`);
-    console.log("Thanks for playing!");
+            if(compScore == 5){
+                header.textContent = "YOU LOSE THE MATCH!"
+                pickers.forEach(picker=>{
+                    picker.replaceWith(picker.cloneNode());
+                })
+            } else if (playerScore == 5){
+                header.textContent = "YOU WIN THE MATCH!"
+                picker.replaceWith(picker.cloneNode());
+            }
+    
+        })
+        });
+
+
+
+
 }
 
 game();
